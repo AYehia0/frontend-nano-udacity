@@ -19,9 +19,35 @@
  * 
 */
 
+// build the nav bar by getting the ids of the main sections
+const buildNavLinks = (sections) => {
+
+    const ulEl = document.getElementById('navbar__list')
+
+    sections.forEach(section => {
+
+        // creating the el
+        const liEl = document.createElement('li')
+
+        // getting data-attr 
+        const sectionName = section.getAttribute('data-nav')
+        const liId = section.id.replace('section', 's')
+
+        // modifiying the li element
+        liEl.innerText = sectionName
+        liEl.id = liId
+        liEl.className = 'menu__link'
+
+        // appending 
+        ulEl.appendChild(liEl)
+    })
+}
+
+
 // getting all the nav links 
-const navSectionLinks = document.querySelectorAll('.menu__link')
 const sections = document.querySelectorAll('section')
+buildNavLinks(sections)
+const navSectionLinks = document.querySelectorAll('.menu__link')
 
 /**
  * End Global Variables
