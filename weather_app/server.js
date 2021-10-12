@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = [];
+projectData = {};
 PORT = 8080;
 
 // Require Express to run server and routes
@@ -27,9 +27,7 @@ app.use(express.static("website"));
 app.get("/result", (req, res, err) => {
   try {
     // sending the data stored in the endpoint as projectData
-    res.send({
-      data: projectData,
-    });
+    res.send(projectData);
   } catch (e) {
     res.send(e.message);
   }
@@ -43,9 +41,8 @@ app.post("/add", (req, res, err) => {
     // if (!Object.keys(resData).includes("data"))
     // throw new Error("Invalid response type");
 
-    projectData.push(resData);
-
-    console.log(projectData);
+    //projectData.push(resData);
+    projectData = resData;
 
     res.send({
       message: "Success",
