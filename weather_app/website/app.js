@@ -7,7 +7,7 @@ const temperature = document.getElementById("temp");
 const content = document.getElementById("content");
 
 // The API keys, it should be hidden in the backend lol
-const API_KEY = "&APPID=e23122c5062eb361eb2aa6ee3762e1db&units=imperial";
+const API_KEY = "&APPID=c1f5f3c16067ae1987af61215d1afe2c&units=imperial";
 
 // the externel api url : openweathermap
 const EXT_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
@@ -18,7 +18,7 @@ const POST_URL = "http://localhost:8080/add";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + "." + d.getDate() + "." + d.getFullYear();
+let newDate = `${d.getMonth()}-${d.getDate()}-${d.getFullYear()}`;
 
 // getting the data from the user
 const getUserData = () => {
@@ -104,7 +104,6 @@ generateButton.addEventListener("click", async () => {
     let weatherToSave = {};
     weather["userFeeling"] = feelings;
 
-    console.error(weather);
     weatherToSave[zip] = weather;
 
     // save to the server
@@ -113,6 +112,15 @@ generateButton.addEventListener("click", async () => {
 });
 
 // Helper functions
+
+// convert UnixTime to readable time
+const convertTime = (timeInUnix) => {
+  const date = new Date(timeInUnix);
+
+  // shows the time : 11/8/2020
+  // toDateString() : "Mon Nov 05 2020"
+  return date.toLocaleDateString();
+};
 
 // return the index of the zip code
 const searchZipCode = (zipCode, objToSearch) => {
@@ -126,7 +134,7 @@ const searchZipCode = (zipCode, objToSearch) => {
 
 // updating the content section with the data
 const updateHTML = (data) => {
-  date.innerHTML = data.dt;
+  date.innerHTML = newDate;
   temperature.innerText = `Temprature : ${data.main.temp}`;
   content.innerText = `User Feelings : ${data.userFeeling}`;
 };
