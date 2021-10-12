@@ -81,34 +81,35 @@ generateButton.addEventListener("click", async () => {
   if (zip <= 4) return;
 
   // checking if the zip code is already in the server side
-  const backendData = await getServerData();
-  const ind = searchZipCode(zip, backendData.data);
+  //const backendData = await getServerData();
+  //const ind = searchZipCode(zip, backendData.data);
 
   // it exists
-  if (ind != -1) {
-    // return it
-    const dataToDisplay = backendData.data[ind][zip];
+  const weather = await getWeatherData(userInputs);
 
-    console.log(dataToDisplay);
-    updateHTML(dataToDisplay);
-  } else {
-    const weather = await getWeatherData(userInputs);
-
-    // checking if the zip code was vaild
-    if (weather.cod == "404") {
-      console.error("Invaild zip code : city not found !!!");
-      alert("Invaild zip code : city not found !!!");
-      return;
-    }
-
-    let weatherToSave = {};
-    weather["userFeeling"] = feelings;
-
-    weatherToSave[zip] = weather;
-
-    // save to the server
-    await saveToServer(weatherToSave);
+  // checking if the zip code was vaild
+  if (weather.cod == "404") {
+    console.error("Invaild zip code : city not found !!!");
+    alert("Invaild zip code : city not found !!!");
+    return;
   }
+
+  let weatherToSave = {
+    userFeeling: feelings,
+    temperature: weather.main.temp,
+    date: newDate,
+  };
+  // saving to the backend
+  await saveToServer(weatherToSave);
+
+  // updating the html, first we need to get the data from the server, idk why but we may assume that the data has been processed there
+  const resFromServer = await fetch(GET_URL);
+  const weatherFromServer = await resFromServer.json();
+
+  console.log(weatherFromServer);
+
+  // updating the html now
+  updateHTML(weatherFromServer);
 });
 
 // Helper functions
@@ -134,7 +135,7 @@ const searchZipCode = (zipCode, objToSearch) => {
 
 // updating the content section with the data
 const updateHTML = (data) => {
-  date.innerHTML = newDate;
-  temperature.innerText = `Temprature : ${data.main.temp}`;
+  date.innerHTML = data.date;
+  temperature.innerText = `Temprature : ${data.temperature}`;
   content.innerText = `User Feelings : ${data.userFeeling}`;
 };
