@@ -18,7 +18,7 @@ const POST_URL = "http://localhost:8080/add";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = `${d.getMonth()}-${d.getDate()}-${d.getFullYear()}`;
+let newDate = d.toLocaleDateString();
 
 // getting the data from the user
 const getUserData = () => {
@@ -136,6 +136,6 @@ const searchZipCode = (zipCode, objToSearch) => {
 // updating the content section with the data
 const updateHTML = (data) => {
   date.innerHTML = data.date;
-  temperature.innerText = `Temprature : ${data.temperature}`;
-  content.innerText = `User Feelings : ${data.userFeeling}`;
+  temperature.innerHTML = `Temprature : ${data.temperature}`;
+  content.innerHTML = `User Feelings : ${data.userFeeling}`;
 };
